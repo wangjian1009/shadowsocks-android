@@ -204,6 +204,36 @@ LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/libcork/src/libcork/,$(CORK_SOU
 include $(BUILD_STATIC_LIBRARY)
 
 ########################################################
+## kcp
+########################################################
+
+include $(CLEAR_VARS)
+
+CKP_SOURCE := ikcp.c
+
+LOCAL_MODULE := libkcp
+LOCAL_CFLAGS += -I$(LOCAL_PATH)/shadowsocks-libev/kcp
+LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/kcp/, $(CKP_SOURCE))
+
+include $(BUILD_STATIC_LIBRARY)
+
+########################################################
+## libebb
+########################################################
+
+include $(CLEAR_VARS)
+
+LIBEBB_SOURCE := ebb.c ebb_request_parser.c
+
+LOCAL_MODULE := libebb
+LOCAL_CFLAGS += -I$(LOCAL_PATH)/shadowsocks-libev/libebb \
+				-I$(LOCAL_PATH)/libev
+
+LOCAL_SRC_FILES := $(addprefix shadowsocks-libev/libebb/, $(LIBEBB_SOURCE))
+
+include $(BUILD_STATIC_LIBRARY)
+
+########################################################
 ## libev
 ########################################################
 
@@ -268,9 +298,11 @@ LOCAL_CFLAGS    := -Wall -fno-strict-aliasing -DMODULE_LOCAL \
 					-I$(LOCAL_PATH)/shadowsocks-libev/libcork/include \
 					-I$(LOCAL_PATH)/shadowsocks-libev/libipset/include \
 					-I$(LOCAL_PATH)/shadowsocks-libev/libbloom \
+					-I$(LOCAL_PATH)/shadowsocks-libev/kcp \
+					-I$(LOCAL_PATH)/shadowsocks-libev/libebb \
 					-I$(LOCAL_PATH)/libev
 
-LOCAL_STATIC_LIBRARIES := libev libmbedtls libipset libcork libbloom \
+LOCAL_STATIC_LIBRARIES := libev libmbedtls libipset libcork libbloom libkcp libebb \
 	libsodium libancillary libpcre
 
 LOCAL_LDLIBS := -llog
